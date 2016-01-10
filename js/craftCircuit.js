@@ -19,6 +19,9 @@ function CraftCircuit() {
 
     var canvasWidth = $("#mycanvas")[0].width;
     var canvasHeight = $("#mycanvas")[0].height;
+
+    console.log(canvasWidth, canvasHeight);
+
     var widthByScale = canvasWidth / worldScale;
     var heightByScale = canvasHeight / worldScale;
 
@@ -72,6 +75,11 @@ function CraftCircuit() {
     };
 
 
+    this.addObstacle = function(type, shapetype, position, data, restitution, density, friction) {
+        var myobstacle = make_body('obstacle', type, position);
+        myobstacle.add_fixture(shapetype, data, restitution, density, friction);
+    };
+
     /*  variable 'data' format:
         if shape is a circle: data must be a number (the radius)
         if shape is a polygon: data must be a object's array with properties 'x' and 'y' (its coordinates)
@@ -107,9 +115,6 @@ function CraftCircuit() {
                 return fixDef;
         }
     };
-
-
-
 
 
     function make_body(id, type, position) {

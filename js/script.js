@@ -7,7 +7,6 @@ $(document).ready(function() {
         mouseY = event.pageY - $(this).offset().top;
     });
 
-
     var cc = new CraftCircuit();
     cc.init();
 
@@ -18,6 +17,7 @@ $(document).ready(function() {
         x: 50,
         y: 50
     }];
+
     cc.addLine(pointsline);
 
 });
