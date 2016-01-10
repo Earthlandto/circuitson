@@ -33,7 +33,7 @@
                 <div class="col-md-2 select-type-pane">
                     <ul>
                         <il>
-                            <button type="button" class="btn btn-block btn-default ">Line</button>
+                            <button type="button" class="btn btn-block btn-default active">Line</button>
                         </il>
                         <il>
                             <button type="button" class="btn btn-block btn-default ">Border</button>
@@ -45,7 +45,7 @@
                 </div>
                 <div class="col-md-3 options-pane ">
                     <ul>
-                        <il class="button-type-body btn-group">
+                        <il class="button-type-body btn-group hidden">
                             <button type="button" class="btn btn-primary">Static</button>
                             <button type="button" class="btn btn-primary">Dynamic</button>
                         </il>
@@ -77,14 +77,14 @@
                                             <input class="coord-input form-control" type="number" min="0.0" placeholder="y">
                                         </div>
                                     </div>
-                                    <div class="form-group ">
+                                    <div class="form-group hidden">
                                         <label class="control-tag col-sm-2" id="p3">P3</label>
                                         <div clas="col-sm-10">
                                             <input class="coord-input form-control" type="number" min="0.0" placeholder="x">
                                             <input class="coord-input form-control" type="number" min="0.0" placeholder="y">
                                         </div>
                                     </div>
-                                    <div class="form-group ">
+                                    <div class="form-group hidden">
                                         <label class="control-tag col-sm-2" id="p4">P4</label>
                                         <div clas="col-sm-10">
                                             <input class="coord-input form-control" type="number" min="0.0" placeholder="x">
@@ -95,7 +95,7 @@
                             </div>
                         </il>
                         <il>
-                            <div class="config-body-pane well" id="obstacles-pane">
+                            <div class="config-body-pane well hidden" id="obstacles-pane">
                                 <form class="form" role="form">
                                     <div class="form-group">
                                         <div class="radio">
@@ -105,7 +105,7 @@
                                                 <input type="radio" name="circle-box">Box</label>
                                         </div>
                                     </div>
-                                    <div class="form-group">
+                                    <div class="form-group hidden">
                                         <label class="control-tag col-sm-2" id="width-height">Form</label>
                                         <div clas="col-sm-10">
                                             <input class="val-input form-control" type="number" min="1" placeholder="width">
