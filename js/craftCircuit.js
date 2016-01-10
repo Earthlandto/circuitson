@@ -9,13 +9,9 @@ function CraftCircuit() {
     var b2MassData = Box2D.Collision.Shapes.b2MassData;
     var b2PolygonShape = Box2D.Collision.Shapes.b2PolygonShape;
     var b2CircleShape = Box2D.Collision.Shapes.b2CircleShape;
-    // var b2ChainShape = Box2D.Collision.Shapes.b2EdgeChainDef;
     var b2DebugDraw = Box2D.Dynamics.b2DebugDraw;
     var b2RevoluteJointDef = Box2D.Dynamics.Joints.b2RevoluteJointDef;
-    // var b2DistanceJointDef = Box2D.Dynamics.Joints.b2DistanceJointDef;
-    // var b2WeldJointDef = Box2D.Dynamics.Joints.b2WeldJointDef;
-    var b2ContactListener = Box2D.Dynamics.b2ContactListener;
-    // var b2ContactFilter = Box2D.Dynamics.b2ContactFilter;
+    // var b2ContactListener = Box2D.Dynamics.b2ContactListener;
 
 
     var world;
