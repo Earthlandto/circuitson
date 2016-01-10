@@ -1,16 +1,16 @@
 canvas {
-    background-color: #464343;
-    width: 500px;
-    height: 500px;
+    background-color: #DCD2D2;
+    /*width: 750px;
+    height: 550px;*/
 }
 
 hr {
-	width: 50%;
-	border: 0;
+    width: 50%;
+    border: 0;
     height: 1px;
     background-image: linear-gradient(to right, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0));
 }
 
-.main-container{
-	padding: 50px;
+.main-container {
+    padding: 20px;
 }

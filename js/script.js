@@ -1,14 +1,23 @@
 $(document).ready(function() {
 
-    var cc = new CraftCircuit();
-    cc.init();
-
     var mouseX, mouseY;
 
     $('#mycanvas').click(function(event) {
-        posX = event.pageX - $(this).offset().left;
-        posY = event.pageY - $(this).offset().top;
-        console.log(posX, posY);
+        mouseX = event.pageX - $(this).offset().left;
+        mouseY = event.pageY - $(this).offset().top;
     });
+
+
+    var cc = new CraftCircuit();
+    cc.init();
+
+    var pointsline = [{
+        x: 0,
+        y: 0
+    }, {
+        x: 50,
+        y: 50
+    }];
+    cc.addLine(pointsline);
 
 });

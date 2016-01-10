@@ -17,11 +17,20 @@ function CraftCircuit() {
     var b2ContactListener = Box2D.Dynamics.b2ContactListener;
     // var b2ContactFilter = Box2D.Dynamics.b2ContactFilter;
 
+
+    var world;
+    var worldScale = 10;
+
+    var canvasWidth = $("#mycanvas")[0].width;
+    var canvasHeight = $("#mycanvas")[0].height;
+    var widthByScale = canvasWidth / worldScale;
+    var heightByScale = canvasHeight / worldScale;
+
     this.init = function() {
         //create the world
         world = new b2World(
-            new b2Vec2(0, 0) //gravity
-            , true //allow sleep
+            new b2Vec2(0, 0), //gravity
+            true //allow sleep
         );
 
         //setup debug draw
@@ -32,47 +41,38 @@ function CraftCircuit() {
         debugDraw.SetLineThickness(1.0);
         debugDraw.SetFlags(b2DebugDraw.e_shapeBit | b2DebugDraw.e_jointBit);
         world.SetDebugDraw(debugDraw);
+
         window.setInterval(update, 1000 / 60);
 
     };
 
     function update() {
         world.Step(
-            1 / 60 //frame-rate
-            , 10 //velocity iterations
-            , 10 //position iterations
+            1 / 60, //frame-rate
+            10, //velocity iterations
+            10 //position iterations
         );
 
         world.DrawDebugData();
         world.ClearForces();
-
     }
 
-    var world;
-    var worldScale = 10.0;
-    var canvasWidth = $("#mycanvas").width;
-    var canvasHeight = $("#mycanvas").height;
-    var widthByScale = canvasWidth / worldScale;
-    var heightByScale = canvasHeight / worldScale;
 
 
+    this.addLine = function(points) {
+        var myline = make_body('line', 'dynamic', {
+            x: 0,
+            y: 0
+        });
+        myline.add_fixture('edge', points);
+    };
 
-
-
-
-
-
-    this.make_body = function(id, type, position) {
-
-        var bodyDef = new b2BodyDef();
-        bodyDef.userData = createNewUserData(id);
-        if (type === 'static') {
-            bodyDef.type = b2Body.b2_staticBody;
-        } else { // 'dynamic'
-            bodyDef.type = b2Body.b2_dynamicBody;
-        }
-        bodyDef.position.Set(new b2Vec2(position.x, position.y));
-        return world.CreateBody(bodyDef);
+    this.addBorder = function(points) {
+        var myborder = make_body('border', 'static', {
+            x: 0,
+            y: 0
+        });
+        myborder.add_fixture('edge', points);
     };
 
 
@@ -84,17 +84,17 @@ function CraftCircuit() {
             if length is 2, we create a simple edge/line
             'data' must be a object's array with properties 'x' and 'y'
     */
-    this.add_fixtureDef = function(body, shapetype, data, restitution, density, friction) {
+    b2Body.prototype.add_fixture = function(shapetype, data, restitution, density, friction) {
 
         var fixDef = new b2FixtureDef();
-        fixDef.density = density || 0;
-        fixDef.restitution = restitution || 0.0;
-        fixDef.friction = friction || 0;
+        fixDef.density = density || 10;
+        fixDef.restitution = restitution || 0;
+        fixDef.friction = friction || 0.2;
 
         switch (shapetype) {
             case 'polygon':
                 fixDef = make_polygon(fixDef, data);
-                body.CreateFixture(fixDef);
+                this.CreateFixture(fixDef);
                 return fixDef;
             case 'circle':
                 return (function(fixDef, data) {
@@ -102,30 +102,50 @@ function CraftCircuit() {
                     if (typeof data === "number")
                         radius = data;
                     fixDef.shape = new b2CircleShape(radius);
-                    body.CreateFixture(fixDef);
+                    this.CreateFixture(fixDef);
                     return fixDef;
                 })();
             case 'edge':
                 fixDef = make_line(fixDef, data);
-                body.CreateFixture(fixDef);
+                this.CreateFixture(fixDef);
                 return fixDef;
         }
     };
 
-    function make_line(fixDef, data) {
+
+
+
+
+    function make_body(id, type, position) {
+
+        var bodyDef = new b2BodyDef();
+        bodyDef.userData = createNewUserData(id);
+        if (type === 'static') {
+            bodyDef.type = b2Body.b2_staticBody;
+        } else { // 'dynamic'
+            bodyDef.type = b2Body.b2_dynamicBody;
+        }
+        bodyDef.position.Set(position.x, position.y);
+        return world.CreateBody(bodyDef);
+    }
+
+
+
+
+    function make_line(myFixDef, data) {
         myFixDef.shape = new b2PolygonShape();
         if (data.length === 2) {
             var v0 = new b2Vec2(data[0].x, data[0].y);
             var v1 = new b2Vec2(data[1].x, data[1].y);
             myFixDef.shape.SetAsEdge(v0, v1);
-            return myFixDef;
-        }
-        if (data.length > 4) {
-            data.splice(-4);
-        }
-        var vecs = getVecsBezier(new Bezier(data));
-        for (i = 0; i < vecs.length - 1; i++) {
-            myFixDef.shape.SetAsEdge(vecs[i], vecs[i + 1]);
+        } else {
+            if (data.length > 4) {
+                data.splice(-4);
+            }
+            var vecs = getVecsBezier(new Bezier(data));
+            for (i = 0; i < vecs.length - 1; i++) {
+                myFixDef.shape.SetAsEdge(vecs[i], vecs[i + 1]);
+            }
         }
         return myFixDef;
     }
