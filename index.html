@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
     <title>Make your own box2d circuit :)</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!--<link rel="stylesheet" href="stylesheets/normalize.css">-->
+    <link rel="stylesheet" href="stylesheets/normalize.css">
     <link rel="stylesheet" href="stylesheets/bootstrap.min.css">
     <link rel="stylesheet" href="stylesheets/style.css">
     <script src="lib/jquery.min.js" type="text/javascript"></script>
@@ -20,18 +20,135 @@
 </head>
 
 <body>
-    <div class="container-fluid">
+    <div class="container">
         <div class="info-container">
             <h2>Circuitson</h2>
             <p>Stuffs explanation</p>
         </div>
         <div class="main-container">
             <div class="row">
-                <div class="col-md-8">
+                <div class="col-md-7 canvas-pane">
                     <canvas id="mycanvas" height="500px" width="500px">Your browser does not support canvas or whatever... =(</canvas>
                 </div>
-                <div class="col-md-4">
-                    <p>Panel</p>
+                <div class="col-md-2 select-type-pane">
+                    <ul>
+                        <il>
+                            <button type="button" class="btn btn-block btn-default ">Line</button>
+                        </il>
+                        <il>
+                            <button type="button" class="btn btn-block btn-default ">Border</button>
+                        </il>
+                        <il>
+                            <button type="button" class="btn btn-block btn-default ">Obstacle</button>
+                        </il>
+                    </ul>
+                </div>
+                <div class="col-md-3 options-pane ">
+                    <ul>
+                        <il class="button-type-body btn-group">
+                            <button type="button" class="btn btn-primary">Static</button>
+                            <button type="button" class="btn btn-primary">Dynamic</button>
+                        </il>
+                        <il>
+                            <div class="config-body-pane well" id="line-border-pane">
+                                <form class="form" role="form">
+                                    <div class="form-group">
+                                        <div class="radio">
+                                            <label class="radio">
+                                                <input type="radio" name="iscurve" checked>Straight line</label>
+                                            <label class="radio">
+                                                <input type="radio" name="iscurve">Quadratic curve (bezier)</label>
+                                            <label class="radio">
+                                                <input type="radio" name="iscurve">Cubic curve (bezier)</label>
+                                        </div>
+                                    </div>
+                                    <br>
+                                    <div class="form-group">
+                                        <label class="control-tag col-sm-2" id="p1">P1</label>
+                                        <div clas="col-sm-10">
+                                            <input class="coord-input form-control" type="number" min="0.0" placeholder="x">
+                                            <input class="coord-input form-control" type="number" min="0.0" placeholder="y">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="control-tag col-sm-2" id="p2">P2</label>
+                                        <div clas="col-sm-10">
+                                            <input class="coord-input form-control" type="number" min="0.0" placeholder="x">
+                                            <input class="coord-input form-control" type="number" min="0.0" placeholder="y">
+                                        </div>
+                                    </div>
+                                    <div class="form-group ">
+                                        <label class="control-tag col-sm-2" id="p3">P3</label>
+                                        <div clas="col-sm-10">
+                                            <input class="coord-input form-control" type="number" min="0.0" placeholder="x">
+                                            <input class="coord-input form-control" type="number" min="0.0" placeholder="y">
+                                        </div>
+                                    </div>
+                                    <div class="form-group ">
+                                        <label class="control-tag col-sm-2" id="p4">P4</label>
+                                        <div clas="col-sm-10">
+                                            <input class="coord-input form-control" type="number" min="0.0" placeholder="x">
+                                            <input class="coord-input form-control" type="number" min="0.0" placeholder="y">
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </il>
+                        <il>
+                            <div class="config-body-pane well" id="obstacles-pane">
+                                <form class="form" role="form">
+                                    <div class="form-group">
+                                        <div class="radio">
+                                            <label class="radio">
+                                                <input type="radio" name="circle-box" checked>Circle</label>
+                                            <label class="radio">
+                                                <input type="radio" name="circle-box">Box</label>
+                                        </div>
+                                    </div>
+                                    <br>
+                                    <div class="form-group ">
+                                        <label class="control-tag col-sm-2" id="position">Position</label>
+                                        <div clas="col-sm-10">
+                                            <input class="coord-input form-control" type="number" min="0" placeholder="x">
+                                            <input class="coord-input form-control" type="number" min="0" placeholder="y">
+                                        </div>
+                                    </div>
+                                    <div class="form-group ">
+                                        <label class="control-tag col-sm-2" id="restitution">Restitution</label>
+                                        <div clas="col-sm-10">
+                                            <input class="val-input form-control" type="number" min="0" value="0">
+                                        </div>
+                                    </div>
+                                    <div class="form-group ">
+                                        <label class="control-tag col-sm-2" id="density">Density</label>
+                                        <div clas="col-sm-10">
+                                            <input class="val-input form-control" type="number" min="0" value="0">
+                                        </div>
+                                    </div>
+                                    <div class="form-group ">
+                                        <label class="control-tag col-sm-2" id="friction">Friction</label>
+                                        <div clas="col-sm-10">
+                                            <input class="val-input form-control" type="number" min="0" value="0">
+                                        </div>
+                                    </div>
+                                    <br>
+                                    <div class="form-group">
+                                        <label class="control-tag col-sm-2" id="radius">Radius</label>
+                                        <div clas="col-sm-10">
+                                            <input class="val-input form-control" type="number" min="1" value="1">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="control-tag col-sm-2" id="width-height">Form</label>
+                                        <div clas="col-sm-10">
+                                            <input class="val-input form-control" type="number" min="1" value="1">
+                                            <input class="val-input form-control" type="number" min="1" value="1">
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </il>
+                    </ul>
                 </div>
             </div>
         </div>

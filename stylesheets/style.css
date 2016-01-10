@@ -1,16 +1,49 @@
 canvas {
     background-color: #DCD2D2;
-    /*width: 750px;
-    height: 550px;*/
+    width: 100%;
+    height: auto;
 }
-
 hr {
     width: 50%;
     border: 0;
     height: 1px;
     background-image: linear-gradient(to right, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0));
 }
+options-pane {
+    background: ligthblue;
+}
+ul {
+    display: inline;
+    padding: 30px;
+}
+label {
+    padding-top: 5px;
+}
+.canvas-pane .select-type-pane .options-pane {
+    padding: 0;
+    margin-right: 10px;
+    margin-left: 10px;
+}
+.select-type-pane {
+    margin-top: 50px;
+}
+.coord-input {
+    width: 70px;
+    margin: 5px;
+}
 
-.main-container {
-    padding: 20px;
+.val-input{
+    width: 80px;
+    margin: 5px;
+}
+.config-body-pane {
+    padding: 10px;
+    margin: 10px;
+}
+.form-group {
+    display: inline-block;
+}
+.button-type-body {
+    margin-left: 30px;
+    margin-right: 30px;
 }
