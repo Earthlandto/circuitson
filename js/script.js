@@ -31,7 +31,7 @@ $(document).ready(function() {
     var mycircuit = new CraftCircuit();
     mycircuit.init();
 
-    // Catch click event to create objects into canvas
+    // Catch click event to create lines into canvas
     $('#mycanvas').click(function(event) {
         mouseX = event.pageX - $(this).offset().left;
         mouseY = event.pageY - $(this).offset().top;
@@ -41,6 +41,13 @@ $(document).ready(function() {
             y: mouseY
         };
         mycircuit.addLine([p0, p1]);
+    });
+
+    //Catch click event to apply zoom to canvas
+    $("#zoom").click(function() {
+        var zoom_val = $("#zoom").val();
+        mycircuit.setScale(zoom_val);
+        $("#zoom-label").text("Zoom (" + zoom_val + ")");
     });
 
 });
