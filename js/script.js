@@ -37,8 +37,8 @@ $(document).ready(function() {
         mouseY = event.pageY - $(this).offset().top;
         p0 = p1;
         p1 = {
-            x: mouseX / worldScale,
-            y: mouseY / worldScale
+            x: mouseX,
+            y: mouseY
         };
         mycircuit.addLine([p0, p1]);
     });

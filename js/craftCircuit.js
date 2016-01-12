@@ -49,18 +49,6 @@ function CraftCircuit() {
         debugDraw.SetDrawScale(worldScale);
     };
 
-    function update() {
-        world.Step(
-            1 / 60, //frame-rate
-            10, //velocity iterations
-            10 //position iterations
-        );
-
-        world.DrawDebugData();
-        world.ClearForces();
-    }
-
-
 
     this.addLine = function(points) {
         var myline = make_body('line', 'dynamic', {
@@ -123,6 +111,8 @@ function CraftCircuit() {
 
     function make_body(id, type, position) {
 
+        //TODO check if it's neccesary div the position by the scale.
+
         var bodyDef = new b2BodyDef();
         bodyDef.userData = createNewUserData(id);
         if (type === 'static') {
@@ -138,6 +128,14 @@ function CraftCircuit() {
 
 
     function make_line(myFixDef, data) {
+
+        data = data.map(function(elem) {
+            return {
+                x: elem.x / worldScale,
+                y: elem.y / worldScale
+            };
+        });
+
         myFixDef.shape = new b2PolygonShape();
         if (data.length === 2) {
             var v0 = new b2Vec2(data[0].x, data[0].y);
@@ -156,6 +154,9 @@ function CraftCircuit() {
     }
 
     function make_polygon(myFixDef, data) {
+
+        //TODO check if it's neccesary div the polygon size by the scale
+
         myFixDef.shape = new b2PolygonShape();
         var vecs = [];
         data.forEach(function(elem) {
@@ -164,6 +165,19 @@ function CraftCircuit() {
         myFixDef.shape.SetAsArray(vecs, vecs.length);
         return myFixDef;
     }
+
+
+    function update() {
+        world.Step(
+            1 / 60, //frame-rate
+            10, //velocity iterations
+            10 //position iterations
+        );
+
+        world.DrawDebugData();
+        world.ClearForces();
+    }
+
 
     function createNewUserData(bodyID) {
         return bodyID + Math.floor(Math.random() * 1000);
