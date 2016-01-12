@@ -20,8 +20,6 @@ function CraftCircuit() {
     var canvasWidth = $("#mycanvas")[0].width;
     var canvasHeight = $("#mycanvas")[0].height;
 
-    console.log(canvasWidth, canvasHeight);
-
     var widthByScale = canvasWidth / worldScale;
     var heightByScale = canvasHeight / worldScale;
 
