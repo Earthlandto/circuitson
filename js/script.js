@@ -28,7 +28,7 @@ $(document).ready(function() {
         y: 0
     };
 
-    var mycircuit = new CraftCircuit();
+    var mycircuit = new CircuitBuilder();
     mycircuit.init();
 
     // Catch click event to create lines into canvas
