@@ -16,6 +16,7 @@ function CraftCircuit() {
 
     var world;
     var worldScale = 10;
+    var debugDraw;
 
     var canvasWidth = $("#mycanvas")[0].width;
     var canvasHeight = $("#mycanvas")[0].height;
@@ -31,7 +32,7 @@ function CraftCircuit() {
         );
 
         //setup debug draw
-        var debugDraw = new b2DebugDraw();
+        debugDraw = new b2DebugDraw();
         debugDraw.SetSprite(document.getElementById("mycanvas").getContext("2d"));
         debugDraw.SetDrawScale(worldScale);
         debugDraw.SetFillAlpha(0.3);
@@ -41,6 +42,11 @@ function CraftCircuit() {
 
         window.setInterval(update, 1000 / 60);
 
+    };
+
+    this.setScale = function(newScale) {
+        worldScale = newScale;
+        debugDraw.SetDrawScale(worldScale);
     };
 
     function update() {
