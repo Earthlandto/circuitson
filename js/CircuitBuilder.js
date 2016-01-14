@@ -86,25 +86,18 @@ function CircuitBuilder() {
         fixDef.density = density || 10;
         fixDef.restitution = restitution || 0;
         fixDef.friction = friction || 0.2;
+        var body = this; //FIXME: fix scope
 
         switch (shapetype) {
             case 'polygon':
-                fixDef = make_polygon(fixDef, data);
-                this.CreateFixture(fixDef);
-                return fixDef;
+                make_polygon(body, fixDef, data);
+                break;
             case 'circle':
-                return (function(fixDef, data) {
-                    var radius = 1;
-                    if (typeof data === "number")
-                        radius = data;
-                    fixDef.shape = new b2CircleShape(radius);
-                    this.CreateFixture(fixDef);
-                    return fixDef;
-                })();
+                make_circle(body, fixDef, data);
+                break;
             case 'edge':
-                fixDef = make_line(fixDef, data);
-                this.CreateFixture(fixDef);
-                return fixDef;
+                make_line(body, fixDef, data);
+                break;
         }
     };
 
@@ -126,34 +119,37 @@ function CircuitBuilder() {
 
 
 
+    //Create bezier cuves
+    function make_line(mybody, myFixDef, mypoints) {
+        var data = [];
+        mypoints.forEach(function(elem) {
+            // Adjust points position to world scale (which is dynamic)
+            data.push(elem.x / worldScale);
+            data.push(elem.y / worldScale);
 
-    function make_line(myFixDef, data) {
-
-        data = data.map(function(elem) {
-            return {
-                x: elem.x / worldScale,
-                y: elem.y / worldScale
-            };
         });
-
         myFixDef.shape = new b2PolygonShape();
-        if (data.length === 2) {
-            var v0 = new b2Vec2(data[0].x, data[0].y);
-            var v1 = new b2Vec2(data[1].x, data[1].y);
-            myFixDef.shape.SetAsEdge(v0, v1);
-        } else {
-            if (data.length > 4) {
-                data.splice(-4);
-            }
-            var vecs = getVecsBezier(new Bezier(data));
-            for (i = 0; i < vecs.length - 1; i++) {
-                myFixDef.shape.SetAsEdge(vecs[i], vecs[i + 1]);
-            }
+        if (data.length === 2 * 2) {
+            /*  Convert a normal line with 2 point into a straight bezier curve.
+                A straight bezier curve has the intermediate points within the
+                then, i'll duplicate just one point at the end of curve. */
+            data = data.concat(data.slice(-2));
         }
-        return myFixDef;
+        if (data.length > 4 * 2) {
+            /*  Avoiding incorrect format in variable 'data'.
+                We keep with the first four points (are 8 elements) .*/
+            data.splice(-4 * 2);
+        }
+        var vecs = getVecsBezier(new Bezier(data));
+
+        for (i = 0; i < vecs.length - 1; i++) {
+            myFixDef.shape.SetAsEdge(vecs[i], vecs[i + 1]);
+            mybody.CreateFixture(myFixDef);
+        }
     }
 
-    function make_polygon(myFixDef, data) {
+
+    function make_polygon(mybody, myFixDef, data) {
 
         //TODO check if it's neccesary div the polygon size by the scale
 
@@ -163,7 +159,15 @@ function CircuitBuilder() {
             vecs.push(new b2Vec2(elem.x, elem.y));
         });
         myFixDef.shape.SetAsArray(vecs, vecs.length);
-        return myFixDef;
+        mybody.CreateFixture(myFixDef);
+    }
+
+    function make_cirlce(mybody, myFixDef, data) {
+        var radius = 1;
+        if (typeof data === "number")
+            radius = data;
+        fixDef.shape = new b2CircleShape(radius);
+        mybody.CreateFixture(fixDef);
     }
 
 
