@@ -140,9 +140,9 @@ function CircuitBuilder() {
                 We keep with the first four points (are 8 elements) .*/
             data.splice(-4 * 2);
         }
-        var vecs = getVecsBezier(new Bezier(data));
+        var vecs = getVecsBezier(new Bezier(data), 50);
 
-        for (i = 0; i < vecs.length - 1; i++) {
+        for (var i = 0; i < vecs.length - 1; i++) {
             myFixDef.shape.SetAsEdge(vecs[i], vecs[i + 1]);
             mybody.CreateFixture(myFixDef);
         }
@@ -187,9 +187,10 @@ function CircuitBuilder() {
         return bodyID + Math.floor(Math.random() * 1000);
     }
 
-    function getVecsBezier(curve, step) {
-        step = step | 100;
-        var LUT = curve.getLUT();
+    function getVecsBezier(curve, steps) {
+        steps = steps | 100;
+        console.log(steps);
+        var LUT = curve.getLUT(steps);
         var vecs = [];
         LUT.forEach(function(p) {
             var vec = new b2Vec2();
