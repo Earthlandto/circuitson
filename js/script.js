@@ -40,8 +40,15 @@ $(document).ready(function() {
             x: mouseX,
             y: mouseY
         };
+        // mycircuit.addBorder([p0, p1]);
         // mycircuit.addLine([p0, p1]);
-        mycircuit.addBorder([p0, p1]);
+        mycircuit.addLine([p0, {
+            x: 100,
+            y: 10
+        }, {
+            x: 400,
+            y: 100
+        }, p1]);
     });
 
     //Catch click event to apply zoom to canvas
