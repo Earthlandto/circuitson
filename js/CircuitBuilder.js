@@ -63,7 +63,7 @@ function CircuitBuilder() {
             x: 0,
             y: 0
         });
-        myborder.add_fixture('edge', points);
+        myborder.add_fixture('border', points);
     };
 
 
@@ -98,6 +98,9 @@ function CircuitBuilder() {
             case 'edge':
                 make_line(body, fixDef, data);
                 break;
+            case 'border':
+                make_border(body, fixDef, data);
+                break;
         }
     };
 
@@ -119,33 +122,22 @@ function CircuitBuilder() {
 
 
 
-    //Create bezier cuves
-    function make_line(mybody, myFixDef, mypoints) {
-        var data = [];
-        mypoints.forEach(function(elem) {
-            // Adjust points position to world scale (which is dynamic)
-            data.push(elem.x / worldScale);
-            data.push(elem.y / worldScale);
+    //Create bezier cuves with OUTLINES
+    function make_line(mybody, myFixDef, data) {
+        var points = checkPoints(data);
+        var vecs = getVecsBezierOutline(new Bezier(points)); // getVecsBezier(new Bezier(data), 50);
 
-        });
         myFixDef.shape = new b2PolygonShape();
-        if (data.length === 2 * 2) {
-            /*  Convert a normal line with 2 point into a straight bezier curve.
-                A straight bezier curve has the intermediate points within the
-                then, i'll duplicate just one point at the end of curve. */
-            data = data.concat(data.slice(-2));
-        }
-        if (data.length > 4 * 2) {
-            /*  Avoiding incorrect format in variable 'data'.
-                We keep with the first four points (are 8 elements) .*/
-            data.splice(-4 * 2);
-        }
-        var vecs = getVecsBezier(new Bezier(data), 50);
+        addpointstoFixture(mybody, myFixDef, vecs);
+    }
 
-        for (var i = 0; i < vecs.length - 1; i++) {
-            myFixDef.shape.SetAsEdge(vecs[i], vecs[i + 1]);
-            mybody.CreateFixture(myFixDef);
-        }
+    //Create bezier cuves
+    function make_border(mybody, myFixDef, data) {
+        var points = checkPoints(data);
+        var vecs = getVecsBezier(new Bezier(points), 50);
+
+        myFixDef.shape = new b2PolygonShape();
+        addpointstoFixture(mybody, myFixDef, vecs);
     }
 
 
@@ -170,6 +162,35 @@ function CircuitBuilder() {
         mybody.CreateFixture(fixDef);
     }
 
+    function checkPoints(data) {
+        var points = [];
+        data.forEach(function(elem) {
+            // Adjust points position to world scale (which is dynamic)
+            points.push(elem.x / worldScale);
+            points.push(elem.y / worldScale);
+
+        });
+        if (points.length === 2 * 2) {
+            /*  Convert a normal line with 2 point into a straight bezier curve.
+                A straight bezier curve has the intermediate points within the
+                then, i'll duplicate just one point at the end of curve. */
+            points = points.concat(points.slice(-2));
+        }
+        if (points.length > 4 * 2) {
+            /*  Avoiding incorrect format in variable 'points'.
+                We keep with the first four points (are 8 elements) .*/
+            points.splice(-4 * 2);
+        }
+        return points;
+    }
+
+    function addpointstoFixture(mybody, myFixDef, vecs) {
+        for (var i = 0; i < vecs.length - 1; i++) {
+            myFixDef.shape.SetAsEdge(vecs[i], vecs[i + 1]);
+            mybody.CreateFixture(myFixDef);
+        }
+    }
+
 
     function update() {
         world.Step(
@@ -177,7 +198,6 @@ function CircuitBuilder() {
             10, //velocity iterations
             10 //position iterations
         );
-
         world.DrawDebugData();
         world.ClearForces();
     }
@@ -187,10 +207,18 @@ function CircuitBuilder() {
         return bodyID + Math.floor(Math.random() * 1000);
     }
 
-    function getVecsBezier(curve, steps) {
-        steps = steps | 100;
-        console.log(steps);
-        var LUT = curve.getLUT(steps);
+    function getVecsBezierOutline(bez) {
+        var outline = bez.outline(1);
+        var vecs = [];
+        (outline.curves).forEach(function(elem) {
+            vecs = vecs.concat(getVecsBezier(elem));
+        });
+        return vecs;
+    }
+
+    function getVecsBezier(bez, steps) {
+        steps = steps | 50;
+        var LUT = bez.getLUT(steps);
         var vecs = [];
         LUT.forEach(function(p) {
             var vec = new b2Vec2();
