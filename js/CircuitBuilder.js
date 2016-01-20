@@ -29,7 +29,7 @@ function CircuitBuilder() {
         world = new b2World(
             new b2Vec2(0, 0), //gravity
             true //allow sleep
-        );
+        ); 
 
         //setup debug draw
         debugDraw = new b2DebugDraw();
@@ -208,7 +208,7 @@ function CircuitBuilder() {
     }
 
     function getVecsBezierOutline(bez) {
-        var outline = bez.outline(1);
+        var outline = bez.outline(0.1);
         var vecs = [];
         (outline.curves).forEach(function(elem) {
             vecs = vecs.concat(getVecsBezier(elem));
@@ -217,7 +217,7 @@ function CircuitBuilder() {
     }
 
     function getVecsBezier(bez, steps) {
-        steps = steps | 50;
+        steps = steps | 4;
         var LUT = bez.getLUT(steps);
         var vecs = [];
         LUT.forEach(function(p) {
