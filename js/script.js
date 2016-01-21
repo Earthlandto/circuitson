@@ -19,11 +19,7 @@ $(document).ready(function() {
 
 
     var mouseX, mouseY;
-    var p0 = {
-        x: 0,
-        y: 0
-    };
-    var p1 = {
+    var p0, p1 = {
         x: 0,
         y: 0
     };

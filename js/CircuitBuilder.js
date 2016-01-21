@@ -40,7 +40,15 @@ function CircuitBuilder() {
         debugDraw.SetFlags(b2DebugDraw.e_shapeBit | b2DebugDraw.e_jointBit);
         world.SetDebugDraw(debugDraw);
 
-        window.setInterval(update, 1000 / 60);
+        window.setInterval(function() {
+            world.Step(
+                1 / 60, //frame-rate
+                10, //velocity iterations
+                10 //position iterations
+            );
+            world.DrawDebugData();
+            world.ClearForces();
+        }, 1000 / 60);
 
     };
 
@@ -121,21 +129,39 @@ function CircuitBuilder() {
     }
 
 
+
+
     function make_line(mybody, myFixDef, data) {
         var points = checkPoints(data);
         //Create bezier cuves with OUTLINES
-        var vecs = getVecsBezierOutline(new Bezier(points)); // getVecsBezier(new Bezier(data), 50);
+        var vecs = getVecsBezierOutline(new Bezier(points));
 
         myFixDef.shape = new b2PolygonShape();
-        addpointstoFixture(mybody, myFixDef, vecs);
+        var aux = [];
+        vecs.forEach(function(elem) {
+            if (elem.LengthSquared() > 0) {
+                aux.push(elem);
+            }
+        });
+        // vecs = [{x:0,y:0},{x: 50,y: 50},{x: 50,y: 50}, {x:0,y:50}];
+        myFixDef.shape.SetAsVector(aux, aux.length);
+        mybody.CreateFixture(myFixDef);
+
     }
+
+
 
     function make_border(mybody, myFixDef, data) {
         var points = scalatePoints(data);
         myFixDef.shape = new b2PolygonShape();
 
-        addpointstoFixture(mybody, myFixDef, points);
+        for (var i = 0; i < points.length - 1; i++) {
+            myFixDef.shape.SetAsEdge(points[i], points[i + 1]);
+            mybody.CreateFixture(myFixDef);
+        }
     }
+
+
 
 
     function make_polygon(mybody, myFixDef, data) {
@@ -172,7 +198,7 @@ function CircuitBuilder() {
 
     function checkPoints(data) {
         var points = [];
-        scalatePoints(data).forEach(function(elem){
+        scalatePoints(data).forEach(function(elem) {
             points.push(elem.x);
             points.push(elem.y);
         });
@@ -192,31 +218,13 @@ function CircuitBuilder() {
         return points;
     }
 
-    function addpointstoFixture(mybody, myFixDef, vecs) {
-        for (var i = 0; i < vecs.length - 1; i++) {
-            myFixDef.shape.SetAsEdge(vecs[i], vecs[i + 1]);
-            mybody.CreateFixture(myFixDef);
-        }
-    }
-
-
-    function update() {
-        world.Step(
-            1 / 60, //frame-rate
-            10, //velocity iterations
-            10 //position iterations
-        );
-        world.DrawDebugData();
-        world.ClearForces();
-    }
-
 
     function createNewUserData(bodyID) {
         return bodyID + Math.floor(Math.random() * 1000);
     }
 
     function getVecsBezierOutline(bez) {
-        var outline = bez.outline(0.1);
+        var outline = bez.outline(1);
         var vecs = [];
         (outline.curves).forEach(function(elem) {
             vecs = vecs.concat(getVecsBezier(elem));
@@ -225,13 +233,11 @@ function CircuitBuilder() {
     }
 
     function getVecsBezier(bez, steps) {
-        steps = steps | 4;
+        steps = steps | 1;
         var LUT = bez.getLUT(steps);
         var vecs = [];
-        LUT.forEach(function(p) {
-            var vec = new b2Vec2();
-            vec.Set(p.x, p.y);
-            vecs.push(vec);
+        LUT.forEach(function(elem) {
+            vecs.push(new b2Vec2(elem.x, elem.y));
         });
         return vecs;
     }
