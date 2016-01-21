@@ -171,8 +171,12 @@ function CircuitBuilder() {
     }
 
     function checkPoints(data) {
-        var points = scalatePoints(data);
-        
+        var points = [];
+        scalatePoints(data).forEach(function(elem){
+            points.push(elem.x);
+            points.push(elem.y);
+        });
+
         var ndimension = 2; // coordinates x and y.
         if (points.length === 2 * ndimension) {
             /*  Convert a normal line with 2 point into a straight bezier curve.
