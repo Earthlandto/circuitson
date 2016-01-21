@@ -29,7 +29,7 @@ function CircuitBuilder() {
         world = new b2World(
             new b2Vec2(0, 0), //gravity
             true //allow sleep
-        ); 
+        );
 
         //setup debug draw
         debugDraw = new b2DebugDraw();
@@ -121,23 +121,20 @@ function CircuitBuilder() {
     }
 
 
-
-    //Create bezier cuves with OUTLINES
     function make_line(mybody, myFixDef, data) {
         var points = checkPoints(data);
+        //Create bezier cuves with OUTLINES
         var vecs = getVecsBezierOutline(new Bezier(points)); // getVecsBezier(new Bezier(data), 50);
 
         myFixDef.shape = new b2PolygonShape();
         addpointstoFixture(mybody, myFixDef, vecs);
     }
 
-    //Create bezier cuves
     function make_border(mybody, myFixDef, data) {
-        var points = checkPoints(data);
-        var vecs = getVecsBezier(new Bezier(points), 50);
-
+        var points = scalatePoints(data);
         myFixDef.shape = new b2PolygonShape();
-        addpointstoFixture(mybody, myFixDef, vecs);
+
+        addpointstoFixture(mybody, myFixDef, points);
     }
 
 
@@ -162,24 +159,31 @@ function CircuitBuilder() {
         mybody.CreateFixture(fixDef);
     }
 
-    function checkPoints(data) {
+    function scalatePoints(data) {
         var points = [];
         data.forEach(function(elem) {
-            // Adjust points position to world scale (which is dynamic)
-            points.push(elem.x / worldScale);
-            points.push(elem.y / worldScale);
-
+            points.push({
+                x: elem.x / worldScale,
+                y: elem.y / worldScale
+            });
         });
-        if (points.length === 2 * 2) {
+        return points;
+    }
+
+    function checkPoints(data) {
+        var points = scalatePoints(data);
+        
+        var ndimension = 2; // coordinates x and y.
+        if (points.length === 2 * ndimension) {
             /*  Convert a normal line with 2 point into a straight bezier curve.
                 A straight bezier curve has the intermediate points within the
                 then, i'll duplicate just one point at the end of curve. */
-            points = points.concat(points.slice(-2));
+            points = points.concat(points.slice(-ndimension));
         }
-        if (points.length > 4 * 2) {
+        if (points.length > 4 * ndimension) {
             /*  Avoiding incorrect format in variable 'points'.
                 We keep with the first four points (are 8 elements) .*/
-            points.splice(-4 * 2);
+            points.splice(-4 * ndimension);
         }
         return points;
     }
