@@ -129,6 +129,8 @@ function CircuitBuilder() {
     }
 
 
+
+
     function make_line(mybody, myFixDef, data) {
         var points = checkPoints(data);
         //Create bezier cuves with OUTLINES
@@ -139,8 +141,9 @@ function CircuitBuilder() {
             myFixDef.shape.SetAsEdge(vecs[i], vecs[i+1]);
             mybody.CreateFixture(myFixDef);
         }
-
     }
+
+
 
     function make_border(mybody, myFixDef, data) {
         var points = scalatePoints(data);
@@ -151,6 +154,8 @@ function CircuitBuilder() {
             mybody.CreateFixture(myFixDef);
         }
     }
+
+
 
 
     function make_polygon(mybody, myFixDef, data) {
@@ -222,7 +227,7 @@ function CircuitBuilder() {
     }
 
     function getVecsBezier(bez, steps) {
-        steps = steps | 4;
+        steps = steps | 1;
         var LUT = bez.getLUT(steps);
         var vecs = [];
         LUT.forEach(function(elem) {
