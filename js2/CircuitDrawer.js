@@ -1,12 +1,23 @@
 function CircuitDrawer(canvas) {
 
     var ctx = canvas.getContext("2d");
+    // var scale = 10;
+
+
+    this.getScale = function() {
+        return scale;
+    };
+
+    this.setScale = function(newScale) {
+        scale = newScale;
+    };
 
     this.empty = function() {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
-    }
+    };
 
     this.draw = function(element) {
+        // ctx.scale(scale,scale);
         switch (element.type) {
             case "line":
                 drawLine(element.data, element.color);
@@ -28,7 +39,7 @@ function CircuitDrawer(canvas) {
             default:
 
         }
-    }
+    };
 
     function drawLine(data, color) {
         ctx.strokeStyle = color ||  "green";
