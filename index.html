@@ -15,7 +15,7 @@
     <!--TODO: Change to URL-->
     <script type="text/javascript" src="lib/bezier.js"></script>
     <!-- <script type="text/javascript" src="lib/Box2d.min.js"></script> -->
-    <!-- <script type="text/javascript" src="js/CircuitBuilder.js"></script> -->
+    <script type="text/javascript" src="js2/CircuitBuilder.js"></script>
     <script type="text/javascript" src="js2/script.js"></script>
     <!--
     <link rel="stylesheet" href="stylesheets/animations.css">
@@ -40,14 +40,52 @@
                         </label>
                     </div>
                 </div>
-                <div class="col-md-4 pagination-centered">
+                <div class="col-md-5 pagination-centered">
                     <ul>
                         <il class="button-type-body btn-group select-type-pane">
-                            <button type="button" class="select-form btn btn-primary active" id="createLine">Line</button>
+                            <button type="button" class="select-form btn btn-primary" id="createLine">Line</button>
                             <button type="button" class="select-form btn btn-primary" id="createBorder">Border</button>
-                            <button type="button" class="select-form btn btn-primary" id="createObstacle">Obstacle</button>
+                            <button type="button" class="select-form btn btn-primary" id="createCircle">Circle</button>
+                            <button type="button" class="select-form btn btn-primary" id="createRect">Rect</button>
                         </il>
-                        <il class="options-pane">
+                        <il>
+                            <div class="options-pane">
+                                <div class="info-pane well">
+                                    <p>First: select a object type.</p>
+                                </div>
+                                <div class="line-pane well hidden">
+                                    <p><b>Point 0:</b> x:<span id="l0x"> </span> y:<span id="l0y"> </span></p>
+                                    <p><b>Point 1:</b> x:<span id="l1x"> </span> y:<span id="l1y"> </span></p>
+                                    <p><b>Point 2:</b> x:<span id="l2x"> </span> y:<span id="l2y"> </span></p>
+                                    <p><b>Point 3:</b> x:<span id="l3x"> </span> y:<span id="l3y"> </span></p>
+                                    <p><b>Dynamic</b></p>
+                                </div>
+                                <div class="border-pane well hidden">
+                                    <p><b>Point 0:</b> x:<span id="b0x"> </span> y:<span id="b0y"> </span></p>
+                                    <p><b>Point 1:</b> x:<span id="b1x"> </span> y:<span id="b1y"> </span></p>
+                                    <p><b>Static</b></p>
+                                </div>
+                                <div class="circle-pane well hidden">
+                                    <p><b>Center:</b> x:<span id="centx"> </span> y:<span id="centy"> </span></p>
+                                    <p><b>Radius:</b> <span><input id="radius" type="number" value="10" name="radius"></span></p>
+                                    <p>Static? <span><input type="checkbox" id="circle-static" name="circle-static"></span></p>
+                                    <p><b>Restitution:</b> <span><input id="circle-res" type="number" width="10px" name="circle-res" value="0"></span></p>
+                                    <p><b>Friction:</b> <span><input id="circle-fric" type="number" width="10px" name="circle-fric" value="0"></span></p>
+                                    <p><b>Density:</b> <span><input id="circle-den" type="number" width="10px" name="circle-den" value="10"></span></p>
+                                </div>
+                                <div class="rect-pane well hidden">
+                                    <p><b>Center:</b> x:<span id="rectx"> </span> y:<span id="recty"> </span></p>
+                                    <p><b>Width:</b> <span><input id="rectW" type="number" value="10" name="rectW"></span></p>
+                                    <p><b>Heigh:</b> <span><input id="rectH" type="number" value="10" name="rectH"></span></p>
+                                    <p>Static? <span><input type="checkbox" id="rect-static" name="rect-static"></span></p>
+                                    <p><b>Restitution:</b> <span><input id="rect-res" type="number" width="10px" name="rect-res" value="0"></span></p>
+                                    <p><b>Friction:</b> <span><input id="rect-fric" type="number" width="10px" name="rect-fric" value="0"></span></p>
+                                    <p><b>Density:</b> <span><input id="rect-den" type="number" width="10px" name="rect-den" value="10"></span></p>
+                                </div>
+                            </div>
+                        </il>
+                        <il>
+                            <button id="add-object" type="submit" class="btn btn-block btn-success">Add element</button>
                         </il>
                     </ul>
                 </div>
