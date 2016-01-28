@@ -64,6 +64,17 @@ $(document).ready(function() {
         }
     });
 
+    $('#convert-JSON').click(function(event) {
+        if (!cb) return;
+        var json = cb.toJSON();
+        var blob = new Blob([json], {type: "application/json"});
+        var a = document.createElement("a");
+        a.href = URL.createObjectURL(blob);
+        a.download = "circuit.json";
+        a.click();
+        window.URL.revokeObjectURL(url);
+	});
+
     //Submit element
     $('#add-object').click(function(event) {
         if (!mode) return;
