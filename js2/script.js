@@ -7,6 +7,9 @@ $(document).ready(function() {
     var mode = null;
     var mousePos = null;
 
+    var cb = new CircuitBuilder();
+    var cd = new CircuitDrawer(canvas);
+
     var linePoints = [],
         indexline = 0,
         maxLinePoints = 4;
@@ -19,9 +22,7 @@ $(document).ready(function() {
 
     var rectCenter = null;
 
-    var cb = new CircuitBuilder();
-
-
+    // select type object
     $(".select-form").click(function() {
         $(this).addClass("active");
         $(this).siblings().removeClass("active");
@@ -63,11 +64,12 @@ $(document).ready(function() {
         }
     });
 
+    //Submit element
     $('#add-object').click(function(event) {
         if (!mode) return;
         switch (mode) {
             case "line":
-            if(linePoints.length ===0) return;
+                if (linePoints.length === 0) return;
                 if (linePoints.length === 2)
                     cb.addLine('line', linePoints);
                 else if (linePoints.length > 2) {
@@ -85,7 +87,7 @@ $(document).ready(function() {
                 $("#l3y").text("");
                 break;
             case "border":
-            if(borderpoints.length === 0) return;
+                if (borderpoints.length === 0) return;
                 cb.addBorder(borderpoints);
                 borderpoints = [];
                 indexBorder = 0;
@@ -95,8 +97,8 @@ $(document).ready(function() {
                 $("#b1y").text("");
                 break;
             case "circle":
-            if(!circleCenter) return;
-                var radius =$("#radius").val();
+                if (!circleCenter) return;
+                var radius = $("#radius").val();
                 var cStatic = $("#circle-static").prop("checked");
                 var cden = $("#circle-den").val(),
                     cfric = $("#circle-fric").val(),
@@ -107,9 +109,9 @@ $(document).ready(function() {
                 $("#centy").text("");
                 break;
             case "rect":
-            if (!rectCenter) return;
-            var rectW =$("#rectW").val();
-            var rectH =$("#rectH").val();
+                if (!rectCenter) return;
+                var rectW = $("#rectW").val();
+                var rectH = $("#rectH").val();
                 var rStatic = $("#rect-static").prop("checked");
                 var rden = $("#rect-den").val(),
                     rfric = $("#rect-fric").val(),
@@ -123,6 +125,18 @@ $(document).ready(function() {
 
         }
     });
+
+    window.setInterval(update, 1000 / 60);
+
+    function update() {
+        cd.empty();
+        var elements = cb.getCircuitElements();
+        elements.forEach(function(elem){
+            cd.draw(elem);
+        });
+
+
+    }
 });
 
 

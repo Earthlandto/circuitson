@@ -1,6 +1,14 @@
 function CircuitBuilder() {
 
-    var myobjects = [];
+    var circuitElements = [];
+
+    this.getCircuitElements = function() {
+        return circuitElements;
+    }
+
+    this.toJSON = function (){
+        return JSON.stringify(circuitElements);
+    };
 
     this.addLine = function(type, linePoints) {
         create(type, linePoints, false);
@@ -11,11 +19,18 @@ function CircuitBuilder() {
     };
 
     this.addCircle = function(center, radius, isStatic, density, friction, restitution) {
-        create("circle", {center: center, radius: radius}, isStatic, density, friction, restitution);
+        create("circle", {
+            center: center,
+            radius: radius
+        }, isStatic, density, friction, restitution);
     };
 
-    this.addRect = function (position, width, heigh, isStatic, density, friction, restitution){
-        create ("rect", {position: position, width:width, heigh: heigh}, isStatic, density, friction, restitution );
+    this.addRect = function(position, width, height, isStatic, density, friction, restitution) {
+        create("rect", {
+            position: position,
+            width: width,
+            height: height
+        }, isStatic, density, friction, restitution);
     };
 
 
@@ -29,8 +44,7 @@ function CircuitBuilder() {
             friction: friction ||  null,
             color: getRandomColor()
         };
-        myobjects.push(obj);
-        console.log(obj);
+        circuitElements.push(obj);
     }
 }
 

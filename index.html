@@ -14,8 +14,9 @@
     <script type="text/javascript" src="lib/bootstrap.min.js"></script>
     <!--TODO: Change to URL-->
     <script type="text/javascript" src="lib/bezier.js"></script>
-    <!-- <script type="text/javascript" src="lib/Box2d.min.js"></script> -->
+    <script type="text/javascript" src="lib/Box2d.min.js"></script>
     <script type="text/javascript" src="js2/CircuitBuilder.js"></script>
+    <script type="text/javascript" src="js2/CircuitDrawer.js"></script>
     <script type="text/javascript" src="js2/script.js"></script>
     <!--
     <link rel="stylesheet" href="stylesheets/animations.css">
@@ -26,8 +27,7 @@
     <div class="container">
         <div class="info-container">
             <h2>Circuitson</h2>
-            <p>Create your owns box2d circuits and import/export the circuit of/to a json file.</p>
-            <p><i>Building... but while you wait, click here <span class="octicon octicon-arrow-down"></span></i></p>
+            <p>Create your own box2d circuits and export them to a json file.</p>
         </div>
         <div class="main-container">
             <div class="row">
@@ -74,7 +74,7 @@
                                     <p><b>Density:</b> <span><input id="circle-den" type="number" width="10px" name="circle-den" value="10"></span></p>
                                 </div>
                                 <div class="rect-pane well hidden">
-                                    <p><b>Center:</b> x:<span id="rectx"> </span> y:<span id="recty"> </span></p>
+                                    <p><b>Upper-left corner Position:</b> x:<span id="rectx"> </span> y:<span id="recty"> </span></p>
                                     <p><b>Width:</b> <span><input id="rectW" type="number" value="10" name="rectW"></span></p>
                                     <p><b>Heigh:</b> <span><input id="rectH" type="number" value="10" name="rectH"></span></p>
                                     <p>Static? <span><input type="checkbox" id="rect-static" name="rect-static"></span></p>
@@ -86,6 +86,9 @@
                         </il>
                         <il>
                             <button id="add-object" type="submit" class="btn btn-block btn-success">Add element</button>
+                        </il>
+                        <il>
+                            <button id="convert-JSON" type="submit" class="btn btn-block btn-success">Download JSON</button>
                         </il>
                     </ul>
                 </div>
