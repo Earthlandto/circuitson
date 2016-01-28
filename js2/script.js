@@ -2,7 +2,8 @@ $(document).ready(function() {
 
 
     //Get the canvas and calculate canvas size and max-size
-    var canvas = document.getElementById('mycanvas');
+    var $canvas = $("#mycanvas"),
+        canvas = $canvas[0];
     var ctx = canvas.getContext('2d');
     var mode = null;
     var mousePos = null;
@@ -30,9 +31,12 @@ $(document).ready(function() {
         $("." + mode + "-pane").removeClass("hidden").siblings().addClass("hidden");
     });
 
-    canvas.addEventListener('mousemove', function(evt) {
-        mousePos = getMousePos(canvas, evt);
-    }, false);
+    // canvas.addEventListener('mousemove', function(evt) {
+    //     // mouseX = event.pageX - $(this).offset().left;
+    //     // mouseY = event.pageY - $(this).offset().top;
+    //     // mousePos = {x: mouseX, y:mouseY};
+    //     mousePos = getMousePos(canvas, evt);
+    // }, false);
 
     // Catch click event to create lines into canvas
     $('#mycanvas').click(function(event) {
@@ -67,13 +71,15 @@ $(document).ready(function() {
     $('#convert-JSON').click(function(event) {
         if (!cb) return;
         var json = cb.toJSON();
-        var blob = new Blob([json], {type: "application/json"});
+        var blob = new Blob([json], {
+            type: "application/json"
+        });
         var a = document.createElement("a");
         a.href = URL.createObjectURL(blob);
         a.download = "circuit.json";
         a.click();
         window.URL.revokeObjectURL(url);
-	});
+    });
 
     //Submit element
     $('#add-object').click(function(event) {
@@ -140,12 +146,48 @@ $(document).ready(function() {
     function update() {
         cd.empty();
         var elements = cb.getCircuitElements();
-        elements.forEach(function(elem){
+        elements.forEach(function(elem) {
             cd.draw(elem);
         });
-
-
+        if (mousePos) {
+            cd.draw({
+                type: "circle",
+                color: "pink",
+                data: {
+                    center: {
+                        x: mousePos.x,
+                        y: mousePos.y
+                    },
+                    radius: 3
+                }
+            });
+        }
     }
+
+    $("#mycanvas").on("mousemove", function(e) {
+        mousePos = (function(e) {
+            var rect = canvas.getBoundingClientRect();
+            return {
+                x: e.clientX - rect.left,
+                y: e.clientY - rect.top
+            };
+        })(e);
+    });
+
+    var container = $canvas.parent();
+
+    //Run function when browser resizes
+    $(window).resize(respondCanvas);
+
+    function respondCanvas() {
+        //Call a function to redraw other content (texts, images etc)
+        $canvas.attr('width', $(container).width()); //max width
+        $canvas.attr('height', $(container).width()); //max height
+    }
+    //Initial call
+    respondCanvas();
+
+
 });
 
 
