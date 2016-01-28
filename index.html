@@ -9,12 +9,14 @@
     <link rel="stylesheet" href="stylesheets/normalize.css">
     <link rel="stylesheet" href="stylesheets/bootstrap.min.css">
     <link rel="stylesheet" href="stylesheets/style.css">
-    <script type="text/javascript" src="lib/jquery.min.js"></script> <!--TODO: Change to URL-->
-    <script type="text/javascript" src="lib/bootstrap.min.js"></script> <!--TODO: Change to URL-->
+    <script type="text/javascript" src="lib/jquery.min.js"></script>
+    <!--TODO: Change to URL-->
+    <script type="text/javascript" src="lib/bootstrap.min.js"></script>
+    <!--TODO: Change to URL-->
     <script type="text/javascript" src="lib/bezier.js"></script>
-    <script type="text/javascript" src="lib/Box2d.min.js"></script>
-    <script type="text/javascript" src="js/CircuitBuilder.js"></script>
-    <script type="text/javascript" src="js/script.js" ></script>
+    <!-- <script type="text/javascript" src="lib/Box2d.min.js"></script> -->
+    <!-- <script type="text/javascript" src="js/CircuitBuilder.js"></script> -->
+    <script type="text/javascript" src="js2/script.js"></script>
     <!--
     <link rel="stylesheet" href="stylesheets/animations.css">
     -->
@@ -29,7 +31,7 @@
         </div>
         <div class="main-container">
             <div class="row">
-                <div class="col-md-7 canvas-pane">
+                <div class="col-md-6 canvas-pane">
                     <canvas id="mycanvas" height="500px" width="500px">Your browser does not support canvas or whatever... =(</canvas>
                     <div>
                         <label>
@@ -38,22 +40,23 @@
                         </label>
                     </div>
                 </div>
-                <div class="col-md-2 select-type-pane">
+                <div class="col-md-4 pagination-centered">
                     <ul>
-                        <il>
-                            <button type="button" class="btn btn-block btn-default active">Line</button>
+                        <il class="button-type-body btn-group select-type-pane">
+                            <button type="button" class="select-form btn btn-primary active" id="createLine">Line</button>
+                            <button type="button" class="select-form btn btn-primary" id="createBorder">Border</button>
+                            <button type="button" class="select-form btn btn-primary" id="createObstacle">Obstacle</button>
                         </il>
-                        <il>
-                            <button type="button" class="btn btn-block btn-default ">Border</button>
-                        </il>
-                        <il>
-                            <button type="button" class="btn btn-block btn-default ">Obstacle</button>
+                        <il class="options-pane">
                         </il>
                     </ul>
                 </div>
-                <div class="col-md-3 options-pane ">
+
+
+
+                <!-- <div class="col-md-3 options-pane ">
                     <ul>
-                        <il class="button-type-body btn-group hidden">
+                        <il class="button-type-body btn-group ">
                             <button type="button" class="btn btn-primary">Static</button>
                             <button type="button" class="btn btn-primary">Dynamic</button>
                         </il>
@@ -71,29 +74,29 @@
                                         </div>
                                     </div>
                                     <br>
-                                    <div class="form-group">
-                                        <label class="control-tag col-sm-2" id="p1">P1</label>
+                                    <div class="form-group" id="p1">
+                                        <label class="control-tag col-sm-2" >P1</label>
                                         <div clas="col-sm-10">
                                             <input class="coord-input form-control" type="number" min="0.0" placeholder="x">
                                             <input class="coord-input form-control" type="number" min="0.0" placeholder="y">
                                         </div>
                                     </div>
-                                    <div class="form-group">
-                                        <label class="control-tag col-sm-2" id="p2">P2</label>
+                                    <div class="form-group" id="p2">
+                                        <label class="control-tag col-sm-2" >P2</label>
                                         <div clas="col-sm-10">
                                             <input class="coord-input form-control" type="number" min="0.0" placeholder="x">
                                             <input class="coord-input form-control" type="number" min="0.0" placeholder="y">
                                         </div>
                                     </div>
-                                    <div class="form-group hidden">
-                                        <label class="control-tag col-sm-2" id="p3">P3</label>
+                                    <div class="form-group hidden" id="p3">
+                                        <label class="control-tag col-sm-2" >P3</label>
                                         <div clas="col-sm-10">
                                             <input class="coord-input form-control" type="number" min="0.0" placeholder="x">
                                             <input class="coord-input form-control" type="number" min="0.0" placeholder="y">
                                         </div>
                                     </div>
-                                    <div class="form-group hidden">
-                                        <label class="control-tag col-sm-2" id="p4">P4</label>
+                                    <div class="form-group hidden" id="p4">
+                                        <label class="control-tag col-sm-2" >P4</label>
                                         <div clas="col-sm-10">
                                             <input class="coord-input form-control" type="number" min="0.0" placeholder="x">
                                             <input class="coord-input form-control" type="number" min="0.0" placeholder="y">
@@ -103,7 +106,7 @@
                             </div>
                         </il>
                         <il>
-                            <div class="config-body-pane well hidden" id="obstacles-pane">
+                            <div class="config-body-pane well " id="obstacles-pane">
                                 <form class="form" role="form">
                                     <div class="form-group">
                                         <div class="radio">
@@ -113,7 +116,7 @@
                                                 <input type="radio" name="circle-box">Box</label>
                                         </div>
                                     </div>
-                                    <div class="form-group hidden">
+                                    <div class="form-group ">
                                         <label class="control-tag col-sm-2" id="width-height">Size</label>
                                         <div clas="col-sm-10">
                                             <input class="val-input form-control" type="number" min="1" placeholder="width">
@@ -157,7 +160,7 @@
                         </il>
                         <button type="submit" class="btn btn-block btn-success">Add element</button>
                     </ul>
-                </div>
+                </div> -->
             </div>
         </div>
         <div class="footer-container">
