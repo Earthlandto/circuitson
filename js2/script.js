@@ -132,8 +132,6 @@ $(document).ready(function() {
                 $("#rectx").text("");
                 $("#recty").text("");
                 break;
-            default:
-
         }
     });
 

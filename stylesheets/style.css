@@ -9,15 +9,9 @@ hr {
     height: 1px;
     background-image: linear-gradient(to right, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0));
 }
-options-pane {
-    background: ligthblue;
-}
 ul {
     display: inline;
     /*padding: 30px;*/
-}
-label {
-    /*padding-top: 5px;*/
 }
 .canvas-pane .select-type-pane .options-pane {
     padding: 50px;
@@ -25,14 +19,11 @@ label {
     margin-left: 10px;
 }
 .select-type-pane {
-    margin-top: 50px;
-    margin-bottom: 50px;
+    /*margin-top: 50px;*/
+    margin-bottom: 20px;
     margin-left: 50px;
 }
-.coord-input {
-    width: 70px;
-    margin: 5px;
-}
+
 .form-group {
     display: inline-block;
 }
