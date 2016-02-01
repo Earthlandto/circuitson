@@ -148,9 +148,59 @@ $(document).ready(function() {
 
     window.setInterval(update, 1000 / 60);
 
+
+    window.addEventListener("keydown", function(e) {
+        switch (e.keyCode) {
+            case 37: // left arrow
+                player.x = (player.x - 10 < 0 ? 0 : player.x - 10);
+                break;
+            case 38: // up arrow
+                player.y = (player.y - 10 < 0 ? 0 : player.y - 10);
+                break;
+            case 39: // right arrow
+                player.x = (player.x+10 > yourWorld.maxX ? yourWorld.maxX : player.x + 10);
+                break;
+            case 40: // down arrow
+                console.log(player, yourWorld);
+                player.y = (player.y +10> yourWorld.maxY ? yourWorld.maxY : player.y + 10);
+                break;
+        }
+        console.log(player);
+    }, false);
+
+
+
+    var player = {
+        x: 0,
+        y: 0
+    };
+    var yourWorld = {
+        minX: 0,
+        minY: 0,
+        maxX: 600,
+        maxY: 600
+    };
+
+
+
     function update() {
+
+        function clamp(value, min, max) {
+            if (value < min) return min;
+            else if (value > max) return max;
+            return value;
+        }
+
+        ctx.setTransform(1, 0, 0, 1, 0, 0); //reset the transform matrix as it is cumulative
         // clean canvas
-        cd.empty();
+        cd.empty(); //clear the viewport AFTER the matrix is reset
+
+        //Clamp the camera position to the world bounds while centering the camera around the player
+        var camX = clamp(-player.x + canvas.width / 2, yourWorld.minX, yourWorld.maxX - canvas.width);
+        var camY = clamp(-player.y + canvas.height / 2, yourWorld.minY, yourWorld.maxY - canvas.height);
+
+        ctx.translate(camX, camY);
+
         //draw elements in builder
         var elements = cb.getCircuitElements();
         elements.forEach(function(elem) {
