@@ -21,9 +21,9 @@ ul {
 .select-type-pane {
     /*margin-top: 50px;*/
     margin-bottom: 20px;
-    margin-left: 50px;
+    /*margin-left: 30px;*/
+    display: inline-flex;
 }
-
-.form-group {
-    display: inline-block;
+.confirm-json-div{
+    margin-top: 50px;
 }
