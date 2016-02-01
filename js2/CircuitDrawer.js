@@ -1,7 +1,7 @@
-function CircuitDrawer(canvas) {
+function CircuitDrawer(canvas, initScale) {
 
     var ctx = canvas.getContext("2d");
-    var scale = 1;
+    var scale = initScale || 1;
 
 
     this.getScale = function() {
@@ -20,8 +20,7 @@ function CircuitDrawer(canvas) {
         // ctx.scale(scale,scale);
         switch (element.type) {
             case "line":
-                drawLine(element.data, element.color);
-                break;
+                //same as "border"
             case "border":
                 drawLine(element.data, element.color);
                 break;
@@ -41,43 +40,56 @@ function CircuitDrawer(canvas) {
         }
     };
 
-    function drawLine(data, color) {
+    function drawLine(points, color) {
+
+        points = points.map(scalePoint);
+
         ctx.strokeStyle = color ||  "green";
-        ctx.lineWidth = 1;
+        ctx.lineWidth = 1*scale;
         ctx.beginPath();
-        ctx.moveTo(data[0].x , data[0].y );
-        ctx.lineTo(data[1].x , data[1].y );
-        ctx.closePath();
+        ctx.moveTo(points[0].x, points[0].y);
+        ctx.lineTo(points[1].x, points[1].y);
+        // ctx.closePath();
         ctx.stroke();
     }
 
     function drawCircle(center, radius, color) {
-
-        ctx.strokeStyle = color ||  "black";
+        center = scalePoint(center);
+        radius *= scale;
         ctx.lineWidth = 1;
+        ctx.strokeStyle = color ||  "black";
+        ctx.lineWidth = 1*scale;
         ctx.beginPath();
         ctx.arc(center.x, center.y, radius, 0, 2 * Math.PI);
-        ctx.closePath();
+        // ctx.closePath();
         ctx.stroke();
     }
 
-    function drawRect(position, width, height, color) {
+    function drawRect(positionUL, width, height, color) {
+        positionUL = scalePoint(positionUL);
+        width *= scale;
+        height *= scale;
+        ctx.lineWidth = 1*scale;
         ctx.fillStyle = color || "yellow";
         ctx.strokeStyle = color ||  "yellow";
 
-        ctx.rect(position.x, position.y, width, height);
+        ctx.rect(positionUL.x, positionUL.y, width, height);
         ctx.stroke();
     }
 
     function drawBezier(points, color) {
-
         if (points.length < 3) return;
 
+        points = points.map(scalePoint);
+
         ctx.fillStyle = color || "blue";
-        ctx.lineWidth = 5;
+        ctx.lineWidth = 2*scale;
         ctx.strokeStyle = color || "blue";
         points.forEach(function(elem) {
-            drawCircle(elem, 2, color);
+            drawCircle({
+                x: elem.x / scale,
+                y: elem.y / scale
+            }, 0.5, color);
             ctx.fill();
         });
         ctx.beginPath();
@@ -88,8 +100,15 @@ function CircuitDrawer(canvas) {
         } else  {
             ctx.quadraticCurveTo(points[1].x, points[1].y, points[2].x, points[2].y);
         }
-        ctx.closePath();
+        // ctx.closePath();
         ctx.stroke();
+    }
+
+    function scalePoint(point) {
+        return {
+            x: point.x * scale,
+            y: point.y * scale
+        };
     }
 
 

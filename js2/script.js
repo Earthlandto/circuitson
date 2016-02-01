@@ -8,15 +8,19 @@ $(document).ready(function() {
     var mode = null;
     var mousePos = null;
 
-    var cb = new CircuitBuilder();
-    var cd = new CircuitDrawer(canvas);
+
+    var scale = $("#zoom").val() || 1;
+
+    var cb = new CircuitBuilder(scale);
+    var cd = new CircuitDrawer(canvas, scale);
+
+    var pointsSelected = [],
+        indexPoint = 0;
 
     var linePoints = [],
-        indexline = 0,
         maxLinePoints = 4;
 
     var borderpoints = [],
-        indexBorder = 0,
         maxBorderPoints = 2;
 
     var circleCenter = null;
@@ -25,6 +29,8 @@ $(document).ready(function() {
 
     // select type object
     $(".select-form").click(function() {
+        indexPoint = 0;
+        pointsSelected = [];
         $(this).addClass("active");
         $(this).siblings().removeClass("active");
         mode = $(this).text().toLowerCase();
@@ -38,26 +44,28 @@ $(document).ready(function() {
                 rectCenter = mousePos;
                 $("#rectx").text(mousePos.x);
                 $("#recty").text(mousePos.y);
+                pointsSelected = [mousePos];
                 break;
             case "circle":
                 circleCenter = mousePos;
                 $("#centx").text(mousePos.x);
                 $("#centy").text(mousePos.y);
+                pointsSelected = [mousePos];
                 break;
             case "border":
-                borderpoints[indexBorder] = mousePos;
-                $("#b" + indexBorder + "x").text(mousePos.x);
-                $("#b" + indexBorder + "y").text(mousePos.y);
-                indexBorder = (indexBorder + 1) % maxBorderPoints;
+                borderpoints[indexPoint] = mousePos;
+                $("#b" + indexPoint + "x").text(mousePos.x);
+                $("#b" + indexPoint + "y").text(mousePos.y);
+                pointsSelected[indexPoint] = mousePos;
+                indexPoint = (indexPoint + 1) % maxBorderPoints;
                 break;
             case "line":
-                linePoints[indexline] = mousePos;
-                $("#l" + indexline + "x").text(mousePos.x);
-                $("#l" + indexline + "y").text(mousePos.y);
-                indexline = (indexline + 1) % maxLinePoints;
+                linePoints[indexPoint] = mousePos;
+                $("#l" + indexPoint + "x").text(mousePos.x);
+                $("#l" + indexPoint + "y").text(mousePos.y);
+                pointsSelected[indexPoint] = mousePos;
+                indexPoint = (indexPoint + 1) % maxLinePoints;
                 break;
-            default:
-
         }
     });
 
@@ -86,7 +94,8 @@ $(document).ready(function() {
                     cb.addLine('curve', linePoints);
                 }
                 linePoints = [];
-                indexline = 0;
+                indexPoint = 0;
+                pointsSelected = [];
                 $("#l0x").text("");
                 $("#l0y").text("");
                 $("#l1x").text("");
@@ -100,7 +109,8 @@ $(document).ready(function() {
                 if (borderpoints.length === 0) return;
                 cb.addBorder(borderpoints);
                 borderpoints = [];
-                indexBorder = 0;
+                indexPoint = 0;
+                pointsSelected = [];
                 $("#b0x").text("");
                 $("#b0y").text("");
                 $("#b1x").text("");
@@ -115,6 +125,7 @@ $(document).ready(function() {
                     cres = $("#circle-res").val();
                 cb.addCircle(circleCenter, radius, cStatic, cden, cfric, cres);
                 circleCenter = null;
+                pointsSelected = [];
                 $("#centx").text("");
                 $("#centy").text("");
                 break;
@@ -128,6 +139,7 @@ $(document).ready(function() {
                     rres = $("#rect-res").val();
                 cb.addRect(rectCenter, rectW, rectH, rStatic, rden, rfric, rres);
                 rectCenter = null;
+                pointsSelected = [];
                 $("#rectx").text("");
                 $("#recty").text("");
                 break;
@@ -137,31 +149,71 @@ $(document).ready(function() {
     window.setInterval(update, 1000 / 60);
 
     function update() {
+        // clean canvas
         cd.empty();
+        //draw elements in builder
         var elements = cb.getCircuitElements();
         elements.forEach(function(elem) {
             cd.draw(elem);
         });
+        //draw mouse position
         if (mousePos) {
             cd.draw({
                 type: "circle",
                 color: "pink",
                 data: {
                     center: {
-                        x: mousePos.x,
-                        y: mousePos.y
+                        x: mousePos.x / scale,
+                        y: mousePos.y / scale
                     },
-                    radius: 3
+                    radius: 3 / scale
                 }
             });
         }
+        //draw points selected
+        pointsSelected.forEach(function(elem) {
+            cd.draw({
+                type: "circle",
+                color: "black",
+                data: {
+                    center: {
+                        x: elem.x / scale,
+                        y: elem.y / scale
+                    },
+                    radius: 3 / scale
+                }
+            });
+        });
     }
 
     //Catch click event to apply zoom to canvas
     $("#zoom").on("change", function() {
-        var zoom_val = $("#zoom").val();
-        cd.setScale(zoom_val);
-        $("#zoom-label").text("Zoom (" + zoom_val + ")");
+        scale = $("#zoom").val();
+        cd.setScale(scale);
+        cb.setScale(scale);
+        $("#zoom-label").text("Zoom (" + scale + ")");
+        //reset points
+        pointsSelected = [];
+        circleCenter = null;
+        rectCenter = null;
+        linePoints = [];
+        borderpoints = [];
+        $("#l0x").text("");
+        $("#l0y").text("");
+        $("#l1x").text("");
+        $("#l1y").text("");
+        $("#l2x").text("");
+        $("#l2y").text("");
+        $("#l3x").text("");
+        $("#l3y").text("");
+        $("#b0x").text("");
+        $("#b0y").text("");
+        $("#b1x").text("");
+        $("#b1y").text("");
+        $("#centx").text("");
+        $("#centy").text("");
+        $("#rectx").text("");
+        $("#recty").text("");
     });
 
     // var scale = 1; // scale of the image
@@ -229,10 +281,10 @@ $(document).ready(function() {
 
 
 
-function getMousePos(canvas, evt) {
-    var rect = canvas.getBoundingClientRect();
-    return {
-        x: evt.clientX - rect.left,
-        y: evt.clientY - rect.top
-    };
-}
+// function getMousePos(canvas, evt) {
+//     var rect = canvas.getBoundingClientRect();
+//     return {
+//         x: evt.clientX - rect.left,
+//         y: evt.clientY - rect.top
+//     };
+// }
