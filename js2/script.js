@@ -160,7 +160,7 @@ $(document).ready(function() {
     //Catch click event to apply zoom to canvas
     $("#zoom").on("change", function() {
         var zoom_val = $("#zoom").val();
-        //cd.setScale(zoom_val);
+        cd.setScale(zoom_val);
         $("#zoom-label").text("Zoom (" + zoom_val + ")");
     });
 

@@ -1,7 +1,7 @@
 function CircuitDrawer(canvas) {
 
     var ctx = canvas.getContext("2d");
-    // var scale = 10;
+    var scale = 1;
 
 
     this.getScale = function() {
@@ -45,8 +45,9 @@ function CircuitDrawer(canvas) {
         ctx.strokeStyle = color ||  "green";
         ctx.lineWidth = 1;
         ctx.beginPath();
-        ctx.moveTo(data[0].x, data[0].y);
-        ctx.lineTo(data[1].x, data[1].y);
+        ctx.moveTo(data[0].x , data[0].y );
+        ctx.lineTo(data[1].x , data[1].y );
+        ctx.closePath();
         ctx.stroke();
     }
 
@@ -56,6 +57,7 @@ function CircuitDrawer(canvas) {
         ctx.lineWidth = 1;
         ctx.beginPath();
         ctx.arc(center.x, center.y, radius, 0, 2 * Math.PI);
+        ctx.closePath();
         ctx.stroke();
     }
 
@@ -86,6 +88,7 @@ function CircuitDrawer(canvas) {
         } else  {
             ctx.quadraticCurveTo(points[1].x, points[1].y, points[2].x, points[2].y);
         }
+        ctx.closePath();
         ctx.stroke();
     }
 
