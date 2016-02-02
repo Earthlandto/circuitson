@@ -152,20 +152,18 @@ $(document).ready(function() {
     window.addEventListener("keydown", function(e) {
         switch (e.keyCode) {
             case 37: // left arrow
-                player.x = (player.x - 10 < 0 ? 0 : player.x - 10);
+                player.x = (player.x - 30 < 0 ? 0 : player.x - 30);
                 break;
             case 38: // up arrow
-                player.y = (player.y - 10 < 0 ? 0 : player.y - 10);
+                player.y = (player.y - 30 < 0 ? 0 : player.y - 30);
                 break;
             case 39: // right arrow
-                player.x = (player.x+10 > yourWorld.maxX ? yourWorld.maxX : player.x + 10);
+                player.x = (player.x + 30 > yourWorld.maxX ? yourWorld.maxX : player.x + 30);
                 break;
             case 40: // down arrow
-                console.log(player, yourWorld);
-                player.y = (player.y +10> yourWorld.maxY ? yourWorld.maxY : player.y + 10);
+                player.y = (player.y + 30 > yourWorld.maxY ? yourWorld.maxY : player.y + 30);
                 break;
         }
-        console.log(player);
     }, false);
 
 
@@ -177,8 +175,8 @@ $(document).ready(function() {
     var yourWorld = {
         minX: 0,
         minY: 0,
-        maxX: 600,
-        maxY: 600
+        maxX: 800,
+        maxY: 800
     };
 
 
@@ -199,6 +197,8 @@ $(document).ready(function() {
         var camX = clamp(-player.x + canvas.width / 2, yourWorld.minX, yourWorld.maxX - canvas.width);
         var camY = clamp(-player.y + canvas.height / 2, yourWorld.minY, yourWorld.maxY - canvas.height);
 
+        console.log(camX, camY);
+
         ctx.translate(camX, camY);
 
         //draw elements in builder
@@ -213,8 +213,8 @@ $(document).ready(function() {
                 color: "pink",
                 data: {
                     center: {
-                        x: mousePos.x / scale,
-                        y: mousePos.y / scale
+                        x: mousePos.x - camX / scale,
+                        y: mousePos.y - camY / scale
                     },
                     radius: 3 / scale
                 }
@@ -227,8 +227,8 @@ $(document).ready(function() {
                 color: "black",
                 data: {
                     center: {
-                        x: elem.x / scale,
-                        y: elem.y / scale
+                        x: elem.x - camX / scale,
+                        y: elem.y - camY / scale
                     },
                     radius: 3 / scale
                 }
