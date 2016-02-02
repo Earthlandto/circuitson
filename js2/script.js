@@ -148,58 +148,9 @@ $(document).ready(function() {
 
     window.setInterval(update, 1000 / 60);
 
-
-    window.addEventListener("keydown", function(e) {
-        switch (e.keyCode) {
-            case 37: // left arrow
-                player.x = (player.x - 30 < 0 ? 0 : player.x - 30);
-                break;
-            case 38: // up arrow
-                player.y = (player.y - 30 < 0 ? 0 : player.y - 30);
-                break;
-            case 39: // right arrow
-                player.x = (player.x + 30 > yourWorld.maxX ? yourWorld.maxX : player.x + 30);
-                break;
-            case 40: // down arrow
-                player.y = (player.y + 30 > yourWorld.maxY ? yourWorld.maxY : player.y + 30);
-                break;
-        }
-    }, false);
-
-
-
-    var player = {
-        x: 0,
-        y: 0
-    };
-    var yourWorld = {
-        minX: 0,
-        minY: 0,
-        maxX: 800,
-        maxY: 800
-    };
-
-
-
     function update() {
-
-        function clamp(value, min, max) {
-            if (value < min) return min;
-            else if (value > max) return max;
-            return value;
-        }
-
-        ctx.setTransform(1, 0, 0, 1, 0, 0); //reset the transform matrix as it is cumulative
         // clean canvas
         cd.empty(); //clear the viewport AFTER the matrix is reset
-
-        //Clamp the camera position to the world bounds while centering the camera around the player
-        var camX = clamp(-player.x + canvas.width / 2, yourWorld.minX, yourWorld.maxX - canvas.width);
-        var camY = clamp(-player.y + canvas.height / 2, yourWorld.minY, yourWorld.maxY - canvas.height);
-
-        console.log(camX, camY);
-
-        ctx.translate(camX, camY);
 
         //draw elements in builder
         var elements = cb.getCircuitElements();
@@ -213,8 +164,8 @@ $(document).ready(function() {
                 color: "pink",
                 data: {
                     center: {
-                        x: mousePos.x - camX / scale,
-                        y: mousePos.y - camY / scale
+                        x: mousePos.x/ scale,
+                        y: mousePos.y/ scale
                     },
                     radius: 3 / scale
                 }
@@ -227,8 +178,8 @@ $(document).ready(function() {
                 color: "black",
                 data: {
                     center: {
-                        x: elem.x - camX / scale,
-                        y: elem.y - camY / scale
+                        x: elem.x/ scale,
+                        y: elem.y/ scale
                     },
                     radius: 3 / scale
                 }
