@@ -150,7 +150,7 @@ $(document).ready(function() {
 
     function update() {
         // clean canvas
-        cd.empty(); //clear the viewport AFTER the matrix is reset
+        cd.empty();
 
         //draw elements in builder
         var elements = cb.getCircuitElements();
@@ -164,8 +164,8 @@ $(document).ready(function() {
                 color: "pink",
                 data: {
                     center: {
-                        x: mousePos.x/ scale,
-                        y: mousePos.y/ scale
+                        x: mousePos.x / scale,
+                        y: mousePos.y / scale
                     },
                     radius: 3 / scale
                 }
@@ -178,8 +178,8 @@ $(document).ready(function() {
                 color: "black",
                 data: {
                     center: {
-                        x: elem.x/ scale,
-                        y: elem.y/ scale
+                        x: elem.x / scale,
+                        y: elem.y / scale
                     },
                     radius: 3 / scale
                 }
